@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const config = require('./config');
 const usersRoutes = require('./routes/users');
+const fournisseursRoutes = require('./routes/fournisseur');
+const cors = require('cors');
 //Database connection
 mongoose.Promise = global.Promise;
 mongoose.connect(config.DATABASE,{ useNewUrlParser: true });
@@ -40,6 +42,7 @@ app.listen(_PORT, function (){
 //allow to read files in folder uploads
 var publicDir = require('path').join(__dirname,'/Uploads');
 app.use('/Uploads', express.static(publicDir));
-
+app.use(cors());
 // allow to excutes url of web services in such route
 app.use('/users', usersRoutes);
+app.use('/fournisseurs', fournisseursRoutes);

@@ -8,10 +8,10 @@ var nodemailer = require ('nodemailer');
 const { sendConfirmationEmail } = require('../nodemailer');
 const jwt = require("jsonwebtoken");
 
+const upload = require('../middleware/upload')
 
 
-
-router.post("/signup", async (req, res) => {
+router.post("/signup", upload.single('photo'), async (req, res) => {
     const {
       firstName,
       lastName,
@@ -21,6 +21,7 @@ router.post("/signup", async (req, res) => {
       age,
     
     } = req.body;
+    
     if (!firstName ||!lastName ||!email || !password || !gender || !age ) {
       res.json({ error: "please add all the feilds" });
     }
@@ -39,13 +40,16 @@ router.post("/signup", async (req, res) => {
         password: hasedPassword,
         gender,
         age,
-        photo: "avatar.png",
         code: "",
+        codeAdmin:""
       });
+if(req.file){
+  user.photo = req.file.path
+}
+
       user
         .save()
         .then((user) => {
-            sendConfirmationEmail(user.firstName,user.email,user.activationCode);
 
           res.json({ message: "signup successfuly" });
         })
@@ -105,7 +109,7 @@ router.post("/signin", (req, res) => {
   });
 });
 
-router.post("/UpdateUser", (req, res) => {
+router.post("/UpdateUser",upload.single('photo'), (req, res) => {
   let updatedUser = {
     id: req.body.id,
     email: req.body.email,
@@ -113,7 +117,7 @@ router.post("/UpdateUser", (req, res) => {
     lastName: req.body.lastName,
     gender: req.body.gender,
     age: req.body.age,
-    photo: req.body.photo
+    photo:req.file.path
   };
   User.findByIdAndUpdate(req.body.id, { $set: updatedUser })
     .then((savedUser) => {
@@ -166,20 +170,19 @@ router.post("/UpdatePassword", (req, res) => {
   });
 });
 
-router.post("/UpdateAvatar", (req, res) => {
-  let updatedUser = {
-    id: req.body.id,
-    avatar: req.body.avatar,
-  };
-  User.findByIdAndUpdate(req.body.id, { $set: updatedUser })
-    .then(() => {
-      res.json({ message: "avatar user updated successfully" });
-    })
-    .catch((error) => {
-      res.json({
-        message: "an error occured when updating avatar user",
-      });
-    });
+
+router.put("/updatephoto/:id",upload.single('photo'), async (req,res) => {
+  try{
+      await User.findOneAndUpdate(
+          { _id: req.params.id },
+          { 
+              photo:req.file.path
+          }
+      );
+      res.send("mise a jour avec succés !");
+  } catch(err){
+      res.send(err);
+  }
 });
 
 ////////////////////////////////////////////////////////////////// ios
@@ -268,6 +271,19 @@ router.post("/changePassword", async (req, res) => {
     res.json({ message: "code incorrect" });
   }
 });
+
+
+
+router.post("/verifAdmin", async (req,res) => {
+  const user = await User.findOne({ email: req.body.email });
+if(user.codeAdmin == req.body.codeAdmin){
+  res.json({ message: "welcome to admin espace" });
+} else {
+  res.json({ message: "you are not an admin" });
+}
+});
+
+
 
 router.post("/ByFacebook", async (req, res) => {
   const { name, email } = req.body;
