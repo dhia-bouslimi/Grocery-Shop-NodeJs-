@@ -4,6 +4,9 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const config = require('./config');
 const usersRoutes = require('./routes/users');
+
+const stocksRoutes = require('./routes/stocks');
+
 //Database connection
 mongoose.Promise = global.Promise;
 mongoose.connect(config.DATABASE,{ useNewUrlParser: true });
@@ -43,3 +46,4 @@ app.use('/Uploads', express.static(publicDir));
 
 // allow to excutes url of web services in such route
 app.use('/users', usersRoutes);
+app.use('/stocks', stocksRoutes);
