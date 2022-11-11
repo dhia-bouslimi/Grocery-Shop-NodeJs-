@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
 var jwt = require('jsonwebtoken');
-const Stock = require('../models/stock');
-const stock = require('../models/stock');
+const Stock = require('../models/Stock');
 
 
 
