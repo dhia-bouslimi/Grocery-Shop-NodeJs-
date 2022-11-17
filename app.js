@@ -8,6 +8,7 @@ const stocksRoutes = require('./routes/stocks');
 const cors = require('cors');
 const dotenv = require("dotenv");
 dotenv.config();
+const promotionsRoutes = require('./routes/promotion');
 
 //Database connection
 mongoose.Promise = global.Promise;
@@ -50,3 +51,4 @@ app.use(cors());
 app.use('/users', usersRoutes);
 app.use('/fournisseurs', fournisseursRoutes);
 app.use('/stocks', stocksRoutes);
+app.use('/promotions', promotionsRoutes);

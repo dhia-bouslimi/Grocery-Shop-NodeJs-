@@ -120,7 +120,7 @@ router.post("/signin", (req, res) => {
 });
 
 
-router.post("/UpdateUser",upload.single('photo'), (req, res) => {
+router.post("/UpdateUser", (req, res) => {
 
 
  
@@ -131,7 +131,7 @@ router.post("/UpdateUser",upload.single('photo'), (req, res) => {
     lastName: req.body.lastName,
     gender: req.body.gender,
     age: req.body.age,
-    photo:req.file.path
+   // photo:req.file.path
     
   };
   User.findByIdAndUpdate(req.body.id, { $set: updatedUser })
@@ -146,7 +146,7 @@ router.post("/UpdateUser",upload.single('photo'), (req, res) => {
               lastName: savedUser.lastName,
               gender: savedUser.gender,
               age: savedUser.age,
-              photo: savedUser.photo,
+            //  photo: savedUser.photo,
           token: "",
         })
       );
