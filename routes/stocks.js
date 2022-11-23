@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 var jwt = require('jsonwebtoken');
 const Stock = require('../models/Stock');
+const uploadStock = require('../middleware/uploadStock')
 
 
 
@@ -11,17 +12,16 @@ const Stock = require('../models/Stock');
 
 
 
-router.post("/addStock", async (req, res) => {
+router.post("/addStock",uploadStock.single('image'), async (req, res) => {
     const {
         type,
         quantite,
-        image,
         prix,
         
      
     
     } = req.body;
-    if (!type ||!quantite ||!image ||!prix  ) {
+    if (!type ||!quantite||!prix  ) {
       res.json({ error: "please add all the feilds" });
     }
 
@@ -30,14 +30,16 @@ router.post("/addStock", async (req, res) => {
       const stock = new Stock({
         type,
         quantite,
-        image,
         prix,
       });
+      if(req.file){
+        stock.image = req.file.path
+      }
       stock
         .save()
         .then((stock) => {
 
-            res.json({ message: "add successfuly" });
+            res.json({ message: "add successfuly", imageUrl: `http://localhost:2500/uploadsStock/${req.file.filename}` });
         })
         .catch((err) => {
           console.log(err);

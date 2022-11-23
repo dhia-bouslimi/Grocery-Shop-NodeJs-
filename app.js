@@ -47,6 +47,9 @@ app.listen(_PORT, function (){
 var publicDir = require('path').join(__dirname,'/Uploads');
 app.use('/Uploads', express.static(publicDir));
 app.use(cors());
+app.use('/uploads', express.static('uploads_user'));
+app.use('/uploadsStock', express.static('uploads_stock'));
+
 // allow to excutes url of web services in such route
 app.use('/users', usersRoutes);
 app.use('/fournisseurs', fournisseursRoutes);

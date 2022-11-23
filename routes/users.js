@@ -60,7 +60,7 @@ if(req.file){
         .save()
         .then((user) => {
            
-
+          
           res.json({ message: "signup successfuly" });
         })
         .catch((err) => {
@@ -195,7 +195,8 @@ router.put("/updatephoto/:id",upload.single('photo'), async (req,res) => {
               photo:req.file.path
           }
       );
-      res.send("mise a jour avec succés !");
+     
+      res.json({ message: "signup successfuly" , photoUrl: `http://localhost:2500/uploads/${req.file.filename}` });
   } catch(err){
       res.send(err);
   }
