@@ -196,7 +196,7 @@ router.put("/updatephoto/:id",upload.single('photo'), async (req,res) => {
           }
       );
      
-      res.json({ message: "signup successfuly" , photoUrl: `http://localhost:2500/uploads/${req.file.filename}` });
+      res.json({ message: "signup successfuly" , photoUrl: `https://shopapp.onrender.com/uploads/${req.file.filename}` });
   } catch(err){
       res.send(err);
   }
