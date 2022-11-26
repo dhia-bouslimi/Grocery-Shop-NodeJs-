@@ -192,7 +192,7 @@ router.put("/updatephoto/:id",upload.single('photo'), async (req,res) => {
       await User.findOneAndUpdate(
           { _id: req.params.id },
           { 
-              photo:req.file.path
+              photo: `https://shopapp.onrender.com/uploads/${req.file.filename}`
           }
       );
      

@@ -31,15 +31,16 @@ router.post("/addStock",uploadStock.single('image'), async (req, res) => {
         type,
         quantite,
         prix,
+        
       });
       if(req.file){
-        stock.image = req.file.path
+        stock.image = `https://shopapp.onrender.com/uploadsStock/${req.file.filename}`
       }
       stock
         .save()
         .then((stock) => {
 
-            res.json({ message: "add successfuly", imageUrl: `https://shopapp.onrender.com/uploadsStock/${req.file.filename}` });
+            res.json({ message: "add successfuly", imageUrl: `https://shopapp.onrender.com/${req.file.filename}` });
         })
         .catch((err) => {
           console.log(err);
