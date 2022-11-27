@@ -40,7 +40,7 @@ router.post("/addStock",uploadStock.single('image'), async (req, res) => {
         .save()
         .then((stock) => {
 
-            res.json({ message: "add successfuly", imageUrl: `https://shopapp.onrender.com/${req.file.filename}` });
+            res.json({ message: "add successfuly", imageUrl: `https://shopapp.onrender.com/uploadsStock/${req.file.filename}` });
         })
         .catch((err) => {
           console.log(err);
