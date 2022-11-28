@@ -13,11 +13,12 @@ router.post("/addpromotion", async (req, res) => {
     const {
         prix_promo,
         duree,
+        produit,
         
      
     
     } = req.body;
-    if (!prix_promo ||!duree) {
+    if (!prix_promo ||!duree ||!produit) {
       res.json({ error: "please add all the feilds" });
     }
    
@@ -26,6 +27,7 @@ router.post("/addpromotion", async (req, res) => {
       const promotion = new Promotion({
         prix_promo,
         duree,
+        produit,
       });
       promotion
         .save()
@@ -59,6 +61,8 @@ router.post("/addpromotion", async (req, res) => {
         id: req.body.id,
         prix_promo: req.body.prix_promo,
         duree: req.body.duree,
+        produit: req.body.produit,
+
      
       };
       Promotion.findByIdAndUpdate(req.body.id, { $set: updatedPromotion })
@@ -69,6 +73,7 @@ router.post("/addpromotion", async (req, res) => {
                  id: savedPromotion._id,
                  prix_promo: savedPromotion.prix_promo,
                  duree: savedPromotion.duree,
+                 produit: savedPromotion.produit,
                 
               token: "",
             })

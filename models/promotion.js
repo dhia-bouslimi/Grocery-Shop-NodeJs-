@@ -8,6 +8,9 @@ const promotionshema = new mongoose.Schema({
     duree:  {
         type: String
     },
+    produit:  {
+        type: String
+    },
     createdAt : {
         type: Date,
         default: Date.now()
