@@ -187,7 +187,7 @@ router.post("/UpdatePassword", (req, res) => {
 
 
 
-router.put("/updatephoto/:id",upload.single('photo'), async (req,res) => {
+router.post("/updatephoto/:id",upload.single('photo'), async (req,res) => {
   try{
       await User.findOneAndUpdate(
           { _id: req.params.id },
