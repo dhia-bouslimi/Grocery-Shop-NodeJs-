@@ -8,7 +8,8 @@ var nodemailer = require ('nodemailer');
 const { sendConfirmationEmail } = require('../nodemailer');
 const jwt = require("jsonwebtoken");
 
-const upload = require('../middleware/upload')
+const upload = require('../middleware/upload');
+const user = require("../models/user");
 
 
 
@@ -195,8 +196,15 @@ router.post("/updatephoto/:id",upload.single('photo'), async (req,res) => {
               photo: `https://shopapp.onrender.com/uploads/${req.file.filename}`
           }
       );
-     
-      res.json({ message: "signup successfuly" , photoUrl: `https://shopapp.onrender.com/uploads/${req.file.filename}` });
+      user
+      .save()
+      .then((user) => {
+
+          res.json({ message: "add successfuly", imageUrl: `https://shopapp.onrender.com/uploads/${req.file.filename}` });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   } catch(err){
       res.send(err);
   }
