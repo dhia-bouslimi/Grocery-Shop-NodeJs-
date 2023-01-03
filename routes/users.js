@@ -3,7 +3,8 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 const User = require('../models/user');
-const bcrypt = require("bcrypt");
+//const bcrypt = require("bcrypt");
+var bcrypt = require('bcryptjs');
 var nodemailer = require ('nodemailer');
 const { sendConfirmationEmail } = require('../nodemailer');
 const jwt = require("jsonwebtoken");
@@ -12,9 +13,34 @@ const upload = require('../middleware/upload');
 const user = require("../models/user");
 
 
+/**
+  * @swagger
+  * tags:
+  *   name: Auth
+*/
 
-
-
+/**
+ * @swagger
+ * /users/signup:
+ *   post:
+ *     summary: Add fournisseur
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Book'
+ *     responses:
+ *       200:
+ *         description: Users Added Successfully!
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Book'
+ *       500:
+ *         description: Some server error
+ */
 
 router.post("/signup", upload.single('photo'), async (req, res) => {
 
@@ -73,7 +99,28 @@ if(req.file){
   });
 
 
-
+/**
+ * @swagger
+ * /users/signin:
+ *   post:
+ *     summary: login
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Book'
+ *     responses:
+ *       200:
+ *         description:  Successfully!
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Book'
+ *       500:
+ *         description: Some server error
+ */
 
 router.post("/signin", (req, res) => {
   const { email, password } = req.body;
@@ -120,7 +167,28 @@ router.post("/signin", (req, res) => {
   });
 });
 
-
+/**
+ * @swagger
+ * /users/UpdateUser:
+ *   post:
+ *     summary: Update
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Book'
+ *     responses:
+ *       200:
+ *         description:  Successfully!
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Book'
+ *       500:
+ *         description: Some server error
+ */
 router.post("/UpdateUser", (req, res) => {
 
 
@@ -159,6 +227,29 @@ router.post("/UpdateUser", (req, res) => {
     });
 });
 
+
+/**
+ * @swagger
+ * /users/UpdatePassword:
+ *   post:
+ *     summary: Update password
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Book'
+ *     responses:
+ *       200:
+ *         description:  Successfully!
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Book'
+ *       500:
+ *         description: Some server error
+ */
 router.post("/UpdatePassword", (req, res) => {
   bcrypt.hash(req.body.password, 10, function (err, hashedPass) {
     console.log(req.body);
@@ -187,20 +278,42 @@ router.post("/UpdatePassword", (req, res) => {
 });
 
 
+/**
+ * @swagger
+ * /users/updatephoto/:id:
+ *   post:
+ *     summary: Update photo
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Book'
+ *     responses:
+ *       200:
+ *         description:  Successfully!
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Book'
+ *       500:
+ *         description: Some server error
+ */
 
 router.post("/updatephoto/:id",upload.single('photo'), async (req,res) => {
   try{
       await User.findOneAndUpdate(
           { _id: req.params.id },
           { 
-              photo: `https://shopapp.onrender.com/uploads/${req.file.filename}`
+              photo: `http://172.17.2.86:2500/uploads/${req.file.filename}`
           }
       );
       user
       .save()
       .then((user) => {
 
-          res.json({ message: "add successfuly", imageUrl: `https://shopapp.onrender.com/uploads/${req.file.filename}` });
+          res.json({ message: "add successfuly", imageUrl: `http://172.17.2.86:2500/uploads/${req.file.filename}` });
       })
       .catch((err) => {
         console.log(err);
@@ -236,6 +349,31 @@ var transporter = nodemailer.createTransport({
   },
 });
 
+
+
+
+/**
+ * @swagger
+ * /users/forgetPassword:
+ *   post:
+ *     summary: forgetPassword
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Book'
+ *     responses:
+ *       200:
+ *         description:  Successfully!
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Book'
+ *       500:
+ *         description: Some server error
+ */
 router.post("/forgetPassword", async (req, res) => {
   const userMail = await User.findOne({ email: req.body.email });
   if (!userMail) {
@@ -291,6 +429,30 @@ router.post("/VerifCode", async (req, res) => {
     res.json({ message: "code incorrect" });
   }
 });
+
+
+/**
+ * @swagger
+ * /users/changePassword:
+ *   post:
+ *     summary: changePassword
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Book'
+ *     responses:
+ *       200:
+ *         description: success!
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Book'
+ *       500:
+ *         description: Some server error
+ */
 
 router.post("/changePassword", async (req, res) => {
   // Change Password

@@ -1,0 +1,27 @@
+version: "3"
+services: 
+  web:
+   build: .
+   environment: 
+    - NODE_END=production
+   ports: 
+    - "2500:2500"
+   networks: 
+    - grocery
+   depends_on: 
+    - mongo 
+   volumes: 
+    - media:/uploads/
+  mongo: 
+   image: mongo 
+   ports: 
+    - "27017:27017" 
+   volumes: 
+    - grocery:/db
+   networks: 
+    - grocery
+volumes:
+ grocery:
+ media: 
+networks: 
+ grocery:

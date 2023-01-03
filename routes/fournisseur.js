@@ -5,11 +5,36 @@ const Fournisseur = require('../models/fournisseur');
 
 
 
+/**
+  * @swagger
+  * tags:
+  *   name: Fournisseur
+*/
 
 
 
-
-
+/**
+ * @swagger
+ * /fournisseurs/addfournisseur:
+ *   post:
+ *     summary: Add fournisseur
+ *     tags: [Fournisseurs]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Book'
+ *     responses:
+ *       200:
+ *         description: Fournisseur Added Successfully!
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Book'
+ *       500:
+ *         description: Some server error
+ */
 
 router.post("/addfournisseur", async (req, res) => {
     const {
@@ -21,7 +46,7 @@ router.post("/addfournisseur", async (req, res) => {
     
     } = req.body;
     if (!fullName ||!numTel ||!adresse || !secteur  ) {
-      res.json({ error: "please add all the feilds" });
+    return res.json({ error: "please add all the feilds" });
     }
   
     const fournisseur = await Fournisseur.findOne({ numTel: numTel });
@@ -40,22 +65,44 @@ router.post("/addfournisseur", async (req, res) => {
         .save()
         .then((fournisseur) => {
 
-            res.json({ message: "add successfuly" });
+           return res.json({ message: "add successfuly" });
         })
         .catch((err) => {
           console.log(err);
         });
     } catch (err) {
-      res.status(500).json(err);
+      return res.status(500).json(err);
     }
   });
 
 
 
+/**
+ * @swagger
+ * fournisseurs/fournisseur:
+ *   get:
+ *     summary: liste fournisseur
+ *     tags: [Fournisseurs]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Book'
+ *     responses:
+ *       200:
+ *         description: ok
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Book'
+ *       500:
+ *         description: Some server error
+ */
   router.get("/fournisseur", async (req,res) => {
     try {
       await Fournisseur.find({}).then((result) => {
-        res.send(result);
+        return res.send(result);
       });
     } catch (err) {
         console.log(err);
@@ -64,25 +111,67 @@ router.post("/addfournisseur", async (req, res) => {
     
 
 
-
+/**
+ * @swagger
+ * fournisseurs/fournisseur/:id:
+ *   get:
+ *     summary:  fournisseur
+ *     tags: [Fournisseurs]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Book'
+ *     responses:
+ *       200:
+ *         description: ok
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Book'
+ *       500:
+ *         description: Some server error
+ */
     router.get('/:id',(req,res) => {
         console.log(req.params.id);
         Fournisseur.findById(req.params.id)
         .then(result=>{
-            res.status(200).json({
+          return res.status(200).json({
                 user:result
             })
         })
         .catch(err=> {
             console.log(err);
-            res.status(500).json({
+            return res.status(500).json({
                 error:err
             })
         })
     });
 
 
-
+/**
+ * @swagger
+ * fournisseurs/UpdateFournisseur:
+ *   post:
+ *     summary: update fournisseur
+ *     tags: [Fournisseurs]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Book'
+ *     responses:
+ *       200:
+ *         description: ok
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Book'
+ *       500:
+ *         description: Some server error
+ */
 
   router.post("/UpdateFournisseur", (req, res) => {
     let updatedFournisseur = {
@@ -107,34 +196,44 @@ router.post("/addfournisseur", async (req, res) => {
         );
       })
       .catch((error) => {
-        res.json({
+        return res.json({
           message: "an error occured when updating user",
         });
       });
   });
 
-
+  /**
+ * @swagger
+ * fournisseurs/deletefournisseur/:fullName:
+ *   delete:
+ *     summary: delete fournisseur
+ *     tags: [Fournisseurs]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Book'
+ *     responses:
+ *       200:
+ *         description: ok
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Book'
+ *       500:
+ *         description: Some server error
+ */
+  
   router.delete("/deletefournisseur/:fullName", async (req, res) => {
     try {
        await Fournisseur.findOneAndRemove({ "fullName": req.params.fullName}).then(doc =>{
-        res.status(200).json(doc);
+        return res.status(200).json(doc);
        })
     } catch (err) {
-        res.send(err);
+      return res.send(err);
     }
 });
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

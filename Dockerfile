@@ -1,15 +1,22 @@
 FROM node:16
 
-LABEL maintainer="Dhia Eddine Bouslimi <dhiaeddine.bouslimi@esprit.tn>"
+# Working dir
+WORKDIR /grocery
 
-RUN mkdir /home/gse
+# Copy files from Build
+COPY package*.json ./
 
-WORKDIR /home/gse
+# Install Globals
+RUN npm install --quiet
 
+# Install Files
+RUN npm install 
+
+# Copy SRC
 COPY . .
 
-RUN apt-get update
+# Open Port
+EXPOSE 2500
 
-RUN apt-get install -y iputils-pin
-
-CMD [ "nmp", "start"]
+# Docker Command to Start Service
+CMD [ "npm", "start"]

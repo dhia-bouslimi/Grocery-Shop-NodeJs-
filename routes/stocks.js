@@ -6,12 +6,37 @@ const uploadStock = require('../middleware/uploadStock')
 
 
 
+/**
+  * @swagger
+  * tags:
+  *   name: Stock
+*/
 
 
 
 
-
-
+/**
+ * @swagger
+ * /stocks/addStock:
+ *   post:
+ *     summary: Add Stock
+ *     tags: [Stocks]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Book'
+ *     responses:
+ *       200:
+ *         description: Stocks Added Successfully!
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Book'
+ *       500:
+ *         description: Some server error
+ */
 router.post("/addStock",uploadStock.single('image'), async (req, res) => {
     const {
         type,
@@ -34,13 +59,13 @@ router.post("/addStock",uploadStock.single('image'), async (req, res) => {
         
       });
       if(req.file){
-        stock.image = `https://shopapp.onrender.com/uploadsStock/${req.file.filename}`
+        stock.image = `http://172.17.2.86:2500/uploadsStock/${req.file.filename}`
       }
       stock
         .save()
         .then((stock) => {
 
-            res.json({ message: "add successfuly", imageUrl: `https://shopapp.onrender.com/uploadsStock/${req.file.filename}` });
+            res.json({ message: "add successfuly", imageUrl: `http:/172.17.2.86:2500/uploadsStock/${req.file.filename}` });
         })
         .catch((err) => {
           console.log(err);
@@ -50,7 +75,28 @@ router.post("/addStock",uploadStock.single('image'), async (req, res) => {
     }
   });
 
-
+/**
+ * @swagger
+ * /stocks/UpdateStock:
+ *   post:
+ *     summary: Update Stock
+ *     tags: [Stocks]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Book'
+ *     responses:
+ *       200:
+ *         description: ok!
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Book'
+ *       500:
+ *         description: Some server error
+ */
   router.post("/UpdateStock", (req, res) => {
     let updatedStock = {
       id: req.body.id,
@@ -81,6 +127,28 @@ router.post("/addStock",uploadStock.single('image'), async (req, res) => {
   });
 
 
+/**
+ * @swagger
+ * /stocks/delete/:type:
+ *   delete:
+ *     summary: Delete Stock
+ *     tags: [Stocks]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Book'
+ *     responses:
+ *       200:
+ *         description: ok!
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Book'
+ *       500:
+ *         description: Some server error
+ */
   router.delete("/delete/:type", async (req, res) => {
     try {
        await Stock.findOneAndRemove({ "type": req.params.type}).then(doc =>{
@@ -99,7 +167,28 @@ router.post("/addStock",uploadStock.single('image'), async (req, res) => {
 
 
 
-
+/**
+ * @swagger
+ * /stocks/stock:
+ *   get:
+ *     summary: Stock
+ *     tags: [Stocks]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Book'
+ *     responses:
+ *       200:
+ *         description: ok!
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Book'
+ *       500:
+ *         description: Some server error
+ */
 
 router.get("/stock", async (req,res) => {
     try {

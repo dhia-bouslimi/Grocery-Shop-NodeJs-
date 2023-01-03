@@ -9,10 +9,11 @@ const cors = require('cors');
 const dotenv = require("dotenv");
 dotenv.config();
 const promotionsRoutes = require('./routes/promotion');
-
+const swaggerUI = require('swagger-ui-express') ;
+const swaggerJSDoc = require('swagger-jsdoc') ;
 //Database connection
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.DATABASE,{ useNewUrlParser: true });
+mongoose.connect(process.env.DATABASELOCAL,{ useNewUrlParser: true });
 mongoose.connection.on('connected', function(req, res) {
     console.log('Connected to the database');
 });
@@ -32,6 +33,39 @@ app.all('/*', function(req, res, next) {
         next();
     }
 });
+
+
+
+
+
+
+
+
+
+// swagger
+const options = {
+    definition: {
+        openapi: "3.0.0",
+        info: {
+            title: "BOOKY API",
+            version: "1.0.0",
+            description: "A simple Express  API",
+        },
+        servers: [
+            {
+                url: "http://localhost:2500",
+            },
+        ],
+    },
+    apis: ["./routes/*.js"],
+};
+
+const specs = swaggerJSDoc(options);
+
+
+//swagger
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
+
  
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));

@@ -6,9 +6,34 @@ const Promotion = require('../models/promotion');
 
 
 
+/**
+  * @swagger
+  * tags:
+  *   name: Promotion
+*/
 
-
-
+  /**
+ * @swagger
+ * prommotions/addpromotion:
+ *   post:
+ *     summary: Add promotion
+ *     tags: [Promotions]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Book'
+ *     responses:
+ *       200:
+ *         description: add successfuly
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Book'
+ *       500:
+ *         description: Some server error
+ */
 router.post("/addpromotion", async (req, res) => {
     const {
         prix_promo,
@@ -45,6 +70,28 @@ router.post("/addpromotion", async (req, res) => {
 
 
 
+  /**
+ * @swagger
+ * promotions/promotion:
+ *   get:
+ *     summary: Add promotion
+ *     tags: [Promotions]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Book'
+ *     responses:
+ *       200:
+ *         description: add successfuly
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Book'
+ *       500:
+ *         description: Some server error
+ */
   router.get("/promotion", async (req,res) => {
     try {
       await Promotion.find({}).then((result) => {
@@ -55,7 +102,28 @@ router.post("/addpromotion", async (req, res) => {
     }
     });
     
-
+ /**
+ * @swagger
+ * prommotions/UpdatePromotion:
+ *   post:
+ *     summary: Update Promotion
+ *     tags: [Promotions]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Book'
+ *     responses:
+ *       200:
+ *         description: ok
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Book'
+ *       500:
+ *         description: Some server error
+ */
     router.post("/UpdatePromotion", (req, res) => {
       let updatedPromotion = {
         id: req.body.id,
@@ -86,7 +154,27 @@ router.post("/addpromotion", async (req, res) => {
         });
     });
   
+ /**
+ * @swagger
+ * prommotions/deletepromotion/:duree:
+ *   post:
+ *     summary: Delete promotion
+ *     tags: [Promotions]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Book'
+ *     responses:
+ *       200:
+ *         description: ok
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Book'
 
+ */
     router.delete("/deletepromotion/:duree", async (req, res) => {
       try {
          await Promotion.findOneAndRemove({ "duree": req.params.duree}).then(doc =>{
