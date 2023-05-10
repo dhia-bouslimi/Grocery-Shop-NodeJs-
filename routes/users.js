@@ -349,14 +349,14 @@ router.post("/updatephooto",upload.single('photo'), async (req,res) => {
       await User.findOneAndUpdate(
           { email: req.body.email },
           { 
-              photo: `http://172.16.1.197:2500/uploads/${req.file.filename}`
+              photo: `https://shopapp.onrender.com/uploads/${req.file.filename}`
           }
       );
       user
       .save()
       .then((user) => {
 
-          res.json({ message: "add successfuly", imageUrl: `http://172.16.1.197:2500/uploads/${req.file.filename}` });
+          res.json({ message: "add successfuly", imageUrl: `https://shopapp.onrender.com/uploads/${req.file.filename}` });
       })
       .catch((err) => {
         console.log(err);
@@ -390,14 +390,14 @@ router.post("/updateavatar",upload.single('photo'), async (req,res) => {
       res.status(200).send(
         JSON.stringify({
           //200 OK
-          msg: `http://192.168.1.15:2500/uploads/${req.file.filename}`
+          msg: `https://shopapp.onrender.com/uploads/${req.file.filename}`
         })
       );
       ///////////////////////////////////////////////////////////////////////////////
       await User.findOneAndUpdate(
         { email: req.body.email },
         { 
-            photo: `http://192.168.1.15:2500/uploads/${req.file.filename}`
+            photo: `https://shopapp.onrender.com/uploads/${req.file.filename}`
         }
     );
     } catch (error) {
