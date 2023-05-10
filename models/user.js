@@ -12,16 +12,20 @@ const usershema = new mongoose.Schema({
         type: String
     },
     lastName: {
-        type: String
+        type: String,
+        required: false,
     },
     gender:  {
-        type: String
+        type: String,
+         required: false,
     },
     age:  {
-        type: String
+        type: String,
+        required: false,
     },
     photo: {
-        type: String
+        type: String,
+        required: false,
     },
     code: {
         type: String,

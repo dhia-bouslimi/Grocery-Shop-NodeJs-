@@ -18,9 +18,6 @@ const fournisseurshema = new mongoose.Schema({
         type: Date,
         default: Date.now()
     },
-    },
-    {
-    toJSON:{virtuals:true},
-});
+    });
 
 const Fournisseur = module.exports = mongoose.model('Fournisseur', fournisseurshema);

@@ -53,7 +53,7 @@ const options = {
         },
         servers: [
             {
-                url: "http://localhost:2500",
+                url: "http://127.0.0.1:2500",
             },
         ],
     },
@@ -72,9 +72,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 const _PORT = process.env.PORT || 2500;
+//const hostname = '0.0.0.0';
+const hostname = '127.0.0.1';
+
 //Start the server
 app.listen(_PORT, function (){
-    console.log('Server Started on port ', _PORT);
+    console.log(`Server Started at https://${hostname}:${_PORT}` );
 });
 
 //allow to read files in folder uploads

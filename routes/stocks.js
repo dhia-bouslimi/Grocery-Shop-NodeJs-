@@ -16,26 +16,13 @@ const uploadStock = require('../middleware/uploadStock')
 
 
 /**
- * @swagger
+ * @swagger 
  * /stocks/addStock:
- *   post:
- *     summary: Add Stock
- *     tags: [Stocks]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/Book'
- *     responses:
- *       200:
- *         description: Stocks Added Successfully!
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Book'
- *       500:
- *         description: Some server error
+ *  get:
+ *     description: Add stocks
+ *     responses: 
+ *         '200':
+ *            description: A successful response
  */
 router.post("/addStock",uploadStock.single('image'), async (req, res) => {
     const {
@@ -59,13 +46,13 @@ router.post("/addStock",uploadStock.single('image'), async (req, res) => {
         
       });
       if(req.file){
-        stock.image = `http://172.17.2.86:2500/uploadsStock/${req.file.filename}`
+        stock.image = `http://192.168.43.125:2500/uploadsStock/${req.file.filename}`
       }
       stock
         .save()
         .then((stock) => {
 
-            res.json({ message: "add successfuly", imageUrl: `http:/172.17.2.86:2500/uploadsStock/${req.file.filename}` });
+            res.json({ message: "add successfuly", imageUrl: `http://192.168.43.125:2500/uploadsStock/${req.file.filename}` });
         })
         .catch((err) => {
           console.log(err);
@@ -168,26 +155,13 @@ router.post("/addStock",uploadStock.single('image'), async (req, res) => {
 
 
 /**
- * @swagger
+ * @swagger 
  * /stocks/stock:
- *   get:
- *     summary: Stock
- *     tags: [Stocks]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/Book'
- *     responses:
- *       200:
- *         description: ok!
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Book'
- *       500:
- *         description: Some server error
+ *  get:
+ *     description: stocks
+ *     responses: 
+ *         '200':
+ *            description: A successful response
  */
 
 router.get("/stock", async (req,res) => {

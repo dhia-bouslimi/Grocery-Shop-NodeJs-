@@ -14,26 +14,13 @@ const Fournisseur = require('../models/fournisseur');
 
 
 /**
- * @swagger
+ * @swagger 
  * /fournisseurs/addfournisseur:
- *   post:
- *     summary: Add fournisseur
- *     tags: [Fournisseurs]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/Book'
- *     responses:
- *       200:
- *         description: Fournisseur Added Successfully!
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Book'
- *       500:
- *         description: Some server error
+ *  post:
+ *     description: fournisseurs
+ *     responses: 
+ *         '200':
+ *            description: A successful response
  */
 
 router.post("/addfournisseur", async (req, res) => {
@@ -78,30 +65,18 @@ router.post("/addfournisseur", async (req, res) => {
 
 
 /**
- * @swagger
- * fournisseurs/fournisseur:
- *   get:
- *     summary: liste fournisseur
- *     tags: [Fournisseurs]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/Book'
- *     responses:
- *       200:
- *         description: ok
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Book'
- *       500:
- *         description: Some server error
+ * @swagger 
+ * /fournisseurs/fournisseur:
+ *  post:
+ *     description: fournisseurs
+ *     responses: 
+ *         '200':
+ *            description: A successful response
  */
-  router.get("/fournisseur", async (req,res) => {
+  router.post("/fournisseur", async (req,res) => {
     try {
       await Fournisseur.find({}).then((result) => {
+        console.log(result);
         return res.send(result);
       });
     } catch (err) {
@@ -112,26 +87,13 @@ router.post("/addfournisseur", async (req, res) => {
 
 
 /**
- * @swagger
- * fournisseurs/fournisseur/:id:
- *   get:
- *     summary:  fournisseur
- *     tags: [Fournisseurs]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/Book'
- *     responses:
- *       200:
- *         description: ok
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Book'
- *       500:
- *         description: Some server error
+ * @swagger 
+ * /fournisseurs/fournisseur/:id:
+ *  get:
+ *     description: fournisseurs
+ *     responses: 
+ *         '200':
+ *            description: A successful response
  */
     router.get('/:id',(req,res) => {
         console.log(req.params.id);

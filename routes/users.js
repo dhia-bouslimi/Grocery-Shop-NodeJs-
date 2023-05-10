@@ -56,7 +56,7 @@ router.post("/signup", upload.single('photo'), async (req, res) => {
 
     
 
-    if (!firstName ||!lastName ||!email || !password || !gender || !age ) {
+    if (!firstName ||!email || !password  ) {
       res.json({ error: "please add all the feilds" });
     }
   
@@ -200,24 +200,41 @@ router.post("/UpdateUser", (req, res) => {
     lastName: req.body.lastName,
     gender: req.body.gender,
     age: req.body.age,
+   // password: req.body.password,
+
    // photo:req.file.path
     
   };
   User.findByIdAndUpdate(req.body.id, { $set: updatedUser })
     .then((savedUser) => {
+    /*  bcrypt.hash(req.body.password, 10, (err, hash) => {
+        if (err) {
+          return res.status(400).json({
+            error: err,
+          });
+        } else {
+          user.password = hash;
+          user.save();
+          return res.status(200).json({ message: "password Has Changed!" });
+        }
+      });*/
+      //
       res.status(202).send(
         JSON.stringify({
           //200 OK
              id: savedUser._id,
               email: savedUser.email,
-              password: savedUser.password,
+             // password: savedUser.password,
               firstName: savedUser.firstName,
               lastName: savedUser.lastName,
               gender: savedUser.gender,
               age: savedUser.age,
+              user: savedUser.user,
+
             //  photo: savedUser.photo,
           token: "",
         })
+
       );
     })
     .catch((error) => {
@@ -306,14 +323,14 @@ router.post("/updatephoto/:id",upload.single('photo'), async (req,res) => {
       await User.findOneAndUpdate(
           { _id: req.params.id },
           { 
-              photo: `http://172.17.2.86:2500/uploads/${req.file.filename}`
+              photo: `http://172.16.4.234:2500/uploads/${req.file.filename}`
           }
       );
       user
       .save()
       .then((user) => {
 
-          res.json({ message: "add successfuly", imageUrl: `http://172.17.2.86:2500/uploads/${req.file.filename}` });
+          res.json({ message: "add successfuly", imageUrl: `http://172.16.4.234:2500/uploads/${req.file.filename}` });
       })
       .catch((err) => {
         console.log(err);
@@ -322,6 +339,86 @@ router.post("/updatephoto/:id",upload.single('photo'), async (req,res) => {
       res.send(err);
   }
 });
+
+
+
+
+
+router.post("/updatephooto",upload.single('photo'), async (req,res) => {
+  try{
+      await User.findOneAndUpdate(
+          { email: req.body.email },
+          { 
+              photo: `http://172.16.1.197:2500/uploads/${req.file.filename}`
+          }
+      );
+      user
+      .save()
+      .then((user) => {
+
+          res.json({ message: "add successfuly", imageUrl: `http://172.16.1.197:2500/uploads/${req.file.filename}` });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  } catch(err){
+      res.send(err);
+  }
+});
+
+
+
+
+
+
+router.post("/updateavatar",upload.single('photo'), async (req,res) => {
+  const userMail = await User.findOne({ email: req.body.email }); //req.body.email.toLowerCase()
+  //console.log(req.body.email);
+  //
+  const file = req.file;
+  if (userMail) {
+    try {
+      if (!file) {
+        const error = new Error("Please upload a file");
+        error.httpStatusCode = 400;
+        console.log("error", "Please upload a file");
+        res.send({ code: 500, msg: "Please upload a file" });
+       // return next({ code: 500, msg: error });
+      }
+      //res.send({ code: 200, msg: file.filename });
+      console.log(file.filename);
+      res.status(200).send(
+        JSON.stringify({
+          //200 OK
+          msg: `http://192.168.1.15:2500/uploads/${req.file.filename}`
+        })
+      );
+      ///////////////////////////////////////////////////////////////////////////////
+      await User.findOneAndUpdate(
+        { email: req.body.email },
+        { 
+            photo: `http://192.168.1.15:2500/uploads/${req.file.filename}`
+        }
+    );
+    } catch (error) {
+      console.log(error);
+      res.status(400).send(error);
+    }
+  } else {
+    console.log("Email not found");
+    res.status(202).json({
+      message: "Email not found",
+    });
+  }
+});
+
+
+
+
+
+
+
+
 
 router.post("/UpdateAvatar", (req, res) => {
   let updatedUser = {
@@ -424,10 +521,17 @@ router.post("/VerifCode", async (req, res) => {
   // Go from Otp to Page change password
   const user = await User.findOne({ email: req.body.email });
   if (user.code == req.body.code) {
-    res.json({ message: "code correct" });
-  } else {
-    res.json({ message: "code incorrect" });
-  }
+
+    return res.status(200).json({ message: "Code corect!" });  } 
+    if (req.body.code != user.code && user.code != "") {
+      console.log("Sorry! The code is incorrect!");
+      return res.status(402).json({ message: "Sorry! The code is incorrect!" });
+    }
+    if (user.code == "") {
+      return res
+        .status(401)
+        .json({ message: "Sorry! There is no code in Database!" });
+    }
 });
 
 
@@ -454,26 +558,33 @@ router.post("/VerifCode", async (req, res) => {
  *         description: Some server error
  */
 
-router.post("/changePassword", async (req, res) => {
+router.post("/changePassword", async (req, res, next) => {
   // Change Password
-  const user = await User.findOne({ email: req.body.email });
-  if (user.code == req.body.code) {
-    bcrypt.hash(req.body.password, 10, (err, hash) => {
-      if (err) {
-        return res.status(400).json({
-          error: err,
-        });
-      } else {
-        user.password = hash;
-        user.code = "";
-        user.save().then((user) => {
-          res.json({ message: "password changed" });
-        });
-      }
-    });
+  const { email, code, password } = req.body;
+  if (!email || !code || !password) {
+    return res.status(422).json({ error: "Something is missing" });
   } else {
-    res.json({ message: "code incorrect" });
-  }
+    //
+    const user = await User.findOne({ email: req.body.email });
+    if (req.body.code == user.code && user.code != "") {
+      bcrypt.hash(req.body.password, 10, (err, hash) => {
+        if (err) {
+          return res.status(400).json({
+            error: err,
+          });
+        } else {
+          user.password = hash;
+          user.code = "";
+          user.save().then((user) => {
+            return res
+              .status(200)
+              .json({ message: "Congratulations, Password changed!" });
+          });
+        }
+      });
+    } else {
+      return res.status(402).json({ message: "Sorry! The code is incorrect!" });
+    }}
 });
 
 

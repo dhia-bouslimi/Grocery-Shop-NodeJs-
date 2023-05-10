@@ -51,8 +51,8 @@ router.post("/addpromotion", async (req, res) => {
       
       const promotion = new Promotion({
         prix_promo,
-        duree,
         produit,
+        duree,
       });
       promotion
         .save()
@@ -72,7 +72,7 @@ router.post("/addpromotion", async (req, res) => {
 
   /**
  * @swagger
- * promotions/promotion:
+ * /promotions/promotion:
  *   get:
  *     summary: Add promotion
  *     tags: [Promotions]
@@ -92,7 +92,7 @@ router.post("/addpromotion", async (req, res) => {
  *       500:
  *         description: Some server error
  */
-  router.get("/promotion", async (req,res) => {
+  router.post("/promotion", async (req,res) => {
     try {
       await Promotion.find({}).then((result) => {
         res.send(result);
