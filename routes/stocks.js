@@ -164,7 +164,7 @@ router.post("/addStock",uploadStock.single('image'), async (req, res) => {
  *            description: A successful response
  */
 
-router.get("/stock", async (req,res) => {
+router.post("/stock", async (req,res) => {
     try {
       await Stock.find({}).then((result) => {
         res.send(result);
@@ -173,6 +173,7 @@ router.get("/stock", async (req,res) => {
         console.log(err);
     }
     });
+    
     router.get('/:id',(req,res) => {
         console.log(req.params.id);
         Stock.findById(req.params.id)
