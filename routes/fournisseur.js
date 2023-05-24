@@ -86,6 +86,9 @@ router.post("/addfournisseur", async (req, res) => {
     
 
 
+    
+
+
 /**
  * @swagger 
  * /fournisseurs/fournisseur/:id:
