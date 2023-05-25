@@ -13,7 +13,7 @@ const swaggerUI = require('swagger-ui-express') ;
 const swaggerJSDoc = require('swagger-jsdoc') ;
 //Database connection
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.DATABASE,{ useNewUrlParser: true });
+mongoose.connect(process.env.DATABASE3,{ useNewUrlParser: true });
 mongoose.connection.on('connected', function(req, res) {
     console.log('Connected to the database');
 });
