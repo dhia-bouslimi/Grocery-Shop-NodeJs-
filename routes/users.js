@@ -323,14 +323,14 @@ router.post("/updatephoto/:id",upload.single('photo'), async (req,res) => {
       await User.findOneAndUpdate(
           { _id: req.params.id },
           { 
-              photo: `http://172.16.4.234:2500/uploads/${req.file.filename}`
+              photo: `https://grocery-shop-node-js.vercel.app/uploads/${req.file.filename}`
           }
       );
       user
       .save()
       .then((user) => {
 
-          res.json({ message: "add successfuly", imageUrl: `http://172.16.4.234:2500/uploads/${req.file.filename}` });
+          res.json({ message: "add successfuly", imageUrl: `https://grocery-shop-node-js.vercel.app/uploads/${req.file.filename}` });
       })
       .catch((err) => {
         console.log(err);
@@ -349,14 +349,14 @@ router.post("/updatephooto",upload.single('photo'), async (req,res) => {
       await User.findOneAndUpdate(
           { email: req.body.email },
           { 
-              photo: `https://shopapp.onrender.com/uploads/${req.file.filename}`
+              photo: `https://grocery-shop-node-js.vercel.app/uploads/${req.file.filename}`
           }
       );
       user
       .save()
       .then((user) => {
 
-          res.json({ message: "add successfuly", imageUrl: `https://shopapp.onrender.com/uploads/${req.file.filename}` });
+          res.json({ message: "add successfuly", imageUrl: `https://grocery-shop-node-js.vercel.app/uploads/${req.file.filename}` });
       })
       .catch((err) => {
         console.log(err);
@@ -390,14 +390,14 @@ router.post("/updateavatar",upload.single('photo'), async (req,res) => {
       res.status(200).send(
         JSON.stringify({
           //200 OK
-          msg: `https://shopapp.onrender.com/uploads/${req.file.filename}`
+          msg: `https://grocery-shop-node-js.vercel.app/uploads/${req.file.filename}`
         })
       );
       ///////////////////////////////////////////////////////////////////////////////
       await User.findOneAndUpdate(
         { email: req.body.email },
         { 
-            photo: `https://shopapp.onrender.com/uploads/${req.file.filename}`
+            photo: `https://grocery-shop-node-js.vercel.app/uploads/${req.file.filename}`
         }
     );
     } catch (error) {

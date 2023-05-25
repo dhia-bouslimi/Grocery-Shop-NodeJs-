@@ -46,13 +46,13 @@ router.post("/addStock",uploadStock.single('image'), async (req, res) => {
         
       });
       if(req.file){
-        stock.image = `https://shopapp.onrender.com/uploadsStock/${req.file.filename}`
+        stock.image = `https://grocery-shop-node-js.vercel.app/uploadsStock/${req.file.filename}`
       }
       stock
         .save()
         .then((stock) => {
 
-            res.json({ message: "add successfuly", imageUrl: `https://shopapp.onrender.com/uploadsStock/${req.file.filename}` });
+            res.json({ message: "add successfuly", imageUrl: `https://grocery-shop-node-js.vercel.app/uploadsStock/${req.file.filename}` });
         })
         .catch((err) => {
           console.log(err);
