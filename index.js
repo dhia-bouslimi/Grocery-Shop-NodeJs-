@@ -71,7 +71,7 @@ app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
 app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
-const _PORT = process.env.PORT || 3000;
+const _PORT = process.env.PORT || 2500;
 //const hostname = '0.0.0.0';
 const hostname = '127.0.0.1';
 
