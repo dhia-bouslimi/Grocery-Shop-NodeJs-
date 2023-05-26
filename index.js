@@ -2,18 +2,18 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const usersRoutes = require('../routes/users');
-const fournisseursRoutes = require('../routes/fournisseur');
-const stocksRoutes = require('../routes/stocks');
+const usersRoutes = require('./routes/users');
+const fournisseursRoutes = require('./routes/fournisseur');
+const stocksRoutes = require('./routes/stocks');
 const cors = require('cors');
 const dotenv = require("dotenv");
 dotenv.config();
-const promotionsRoutes = require('../routes/promotion');
+const promotionsRoutes = require('./routes/promotion');
 const swaggerUI = require('swagger-ui-express') ;
 const swaggerJSDoc = require('swagger-jsdoc') ;
 //Database connection
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.DATABASE3,{ useNewUrlParser: true });
+mongoose.connect(process.env.DATABASE,{ useNewUrlParser: true });
 mongoose.connection.on('connected', function(req, res) {
     console.log('Connected to the database');
 });
@@ -72,8 +72,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 const _PORT = process.env.PORT || 2500;
-const hostname = '0.0.0.0';
-//const hostname = '127.0.0.1';
+//const hostname = '0.0.0.0';
+const hostname = '127.0.0.1';
 
 //Start the server
 app.listen(_PORT, function (){
